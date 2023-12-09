@@ -7,6 +7,13 @@ const Title = () =>{
     const navigation= useNavigation();
     const[name, setName] = useState('');
     console.log(name)
+
+    const getData = async() => {
+      const list = collection(db, 'users');
+      const test = await getDocs(list);
+      const nameList = test.docs.map(doc => doc.data());
+      console.log(nameList);
+    }
    
   
   return (
@@ -20,7 +27,7 @@ const Title = () =>{
               <TextInput onChangeText={(newText)=>{
                           setName(newText);}}  placeholder="Name of the Deck"style = {styles.title}></TextInput>
 
-              <TouchableOpacity onPress ={()=> {navigation.navigate("Add", name);}} >
+              <TouchableOpacity onPress ={()=> {getData();navigation.navigate("Add", name);}} >
                 <View style= {styles.createB}>
                     <Text style = {{color: "#FFF",fontFamily: "Gill Sans",fontSize: 25, fontWeight:'bold', top: 10}}>Create</Text>
                 </View>
