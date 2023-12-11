@@ -1,4 +1,4 @@
-import { StyleSheet, Text,Button, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import React, {useState, } from 'react';
@@ -6,54 +6,35 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { fb_auth } from '../FirebaseConfig.ts';
 
 const Login = () =>{
-    const[email, setEmail] = useState('');
-    const[password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const auth = fb_auth;
+  const[email, setEmail] = useState('');
+  const[password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const auth = fb_auth;
 
-    const navigation = useNavigation();
+  const navigation = useNavigation();
     
-    const signIn = async() => {
-      setLoading(true);
-      try {
-        const response = await signInWithEmailAndPassword(auth, email, password);
-        console.log(response);
-        navigation.navigate("Home");
-      } catch (error) {
-        console.log(error);
-        alert("Invalid username or password.");
-      } finally {
-        setLoading(false);
-      }
+  const signIn = async() => {
+    setLoading(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log(response);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+      alert("Invalid username or password.");
+    } finally {
+      setLoading(false);
     }
+  }
 
-    // const signUp = async() => {
-    //   setLoading(true);
-    //   try {
-    //     const response = await createUserWithEmailAndPassword(auth, email, password);
-    //     console.log(response);
-    //     alert("Thank you for joining SwiftDeck");
-    //   } catch (error) {
-    //     console.log(error);
-    //     alert("Try Again");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
-
-    return(
-        <LinearGradient style = {styles.container}
-            colors= {["#08204f", "#92e8f1"]}>
-            <Image source = {require('../assets/swiftDeck.png')}
-                    style = {styles.logo}></Image>
-
-            <Text style = {{top: 10, color: "#FFF", fontSize: 30, fontWeight: "bold", fontFamily: "Gill Sans"}}>Welcome Back!</Text>
-            <Text style = {{top: 15, color: "#FFF", fontSize: 15, fontWeight: "bold", fontFamily: "Gill Sans"}}>Login to your account</Text>
-
-            <TextInput 
-                style = {styles.uInput}
-                placeholder={'Username'} 
-                placeholderTextColor={"#FFF"}
+  return(
+    <LinearGradient style = {styles.container} colors= {["#08204f", "#92e8f1"]}>
+      <Image source = {require('../assets/swiftDeck.png')} style = {styles.logo}></Image>
+      <Text style = {{top: 10, color: "#FFF", fontSize: 30, fontWeight: "bold", fontFamily: "Gill Sans"}}>Welcome Back!</Text>
+      <Text style = {{top: 15, color: "#FFF", fontSize: 15, fontWeight: "bold", fontFamily: "Gill Sans"}}>Login to your account</Text>
+      <TextInput style = {styles.uInput}
+                 placeholder={'Username'} 
+        placeholderTextColor={"#FFF"}
                 value={email}
                 onChangeText={text => setEmail(text)}
             />
@@ -91,13 +72,13 @@ const styles = StyleSheet.create({
     },
 
     logo:{
-        position: 'absolute',
-        flex:1,
-        width: 410,
-        height: 400,
-        left: -10,
-        resizeMode: 'contain',
-        top: 10,
+      justifyContent: 'center',
+      position: 'absolute',
+      flex:1,
+      width: '100%',
+      height: "50%",
+      resizeMode: 'contain',
+      bottom: '47%',
       },
 
       uInput:{
@@ -131,7 +112,6 @@ const styles = StyleSheet.create({
         top: 110,
         
       },
-
   });
 
   export default Login;

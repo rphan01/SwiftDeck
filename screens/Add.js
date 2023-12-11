@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextInput, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
@@ -13,68 +13,46 @@ function Add ({route}){
   const auths = getAuth();
   const user = auths.currentUser;
   const uid = user.uid;
-  
-  const{names} = route.params
-  
+  const{names} = route.params;
   
   const addTD = async() =>{
-    const val = doc(db, "users",uid, "decks", JSON.parse(names))
+    const val = doc(db, "users", uid, "decks", JSON.parse(names))
    await updateDoc(val,{
       td: arrayUnion({word,definition}),
    })
   }
 
-  const data =[]
-
-  function handleAdd(){
-    data.push({word: word, defintion: definition})
-  }
- 
-
-
   return (
-  
-      <LinearGradient style = {styles.container}
-          colors= {["#08204f", "#92e8f1"]}>
-          <Image source = {require('../assets/swiftDeck.png')}
-                  style = {styles.head_logo}></Image>
-          
-          <View style = {styles.box}>
-              <KeyboardAvoidingView enabled = {true} keyboardVerticalOffset={10}>
-                           
-              <TextInput multiline= {true} style = {styles.term}
-                          value={word}
-                          placeholder='Enter Term'
-                          onChangeText={(newText)=>{
-                          setWord(newText);}}/>
-
-              <TextInput multiline= {true} style = {styles.definition}
-                          value = {definition}
-                          placeholder='Enter Definition'
-                          onChangeText={(newText)=>{
-                          setDef(newText);}}/>
-             </KeyboardAvoidingView>
-
-              <TouchableOpacity onPress ={()=>{addTD();handleAdd();navigation.navigate("Creates", names)}}>
-                  <View style = {styles.createB}>
-                      <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 10, fontSize: 30, fontWeight: 'bold'}}>
-                          Create
-                      </Text>
-                  </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress = {() => {navigation.navigate("Home")}}>
-                <View style = {styles.backB}>
-                  <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 5, fontSize: 15, fontWeight: 'bold'}}>BACK</Text>
-                </View>
-              </TouchableOpacity>
-              
-          </View>
-      
-
-      
+    <LinearGradient style = {styles.container} colors= {["#08204f", "#92e8f1"]}>
+      <Image source = {require('../assets/swiftDeck.png')} style = {styles.head_logo}></Image>
+        <View style = {styles.box}>
+          <KeyboardAvoidingView enabled = {true} keyboardVerticalOffset={10}>                 
+            <TextInput multiline= {true} style = {styles.term}
+                       value={word}
+                       placeholder='Enter Term'
+                       onChangeText={(newText)=>{
+                       setWord(newText);}}/>
+            <TextInput multiline= {true} style = {styles.definition}
+                       value = {definition}
+                       placeholder='Enter Definition'
+                       onChangeText={(newText)=>{
+                       setDef(newText);}}/>
+          </KeyboardAvoidingView>
+          <TouchableOpacity onPress ={()=>{addTD();navigation.navigate("Creates", {name:names})}}>
+            <View style = {styles.createB}>
+              <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 10, fontSize: 30, fontWeight: 'bold'}}>
+                Create
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress = {() => {navigation.navigate("Home")}}>
+            <View style = {styles.backB}>
+              <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 5, fontSize: 15, fontWeight: 'bold'}}>BACK</Text>
+            </View>
+          </TouchableOpacity>    
+        </View>
       </LinearGradient>
-
-);
+    );
 }
 
 const styles = StyleSheet.create({
@@ -86,7 +64,6 @@ const styles = StyleSheet.create({
   },
   box:{
       borderRadius: 10,
-      // borderWidth: 1,
       width: 300,
       height: 450,
       backgroundColor: '#a2d8f7',
@@ -96,13 +73,13 @@ const styles = StyleSheet.create({
       borderColor:"white",
   },
   head_logo:{
-      position: 'absolute',
-      flex:1,
-      width: 400,
-      height: 400,
-      left: -5,
-      resizeMode: 'contain',
-      bottom: 515,
+    justifyContent: 'center',
+    position: 'absolute',
+    flex:1,
+    width: '100%',
+    height: "50%",
+    resizeMode: 'contain',
+    bottom: '60%',
   },
   sets:{
       borderRadius: 10,
@@ -126,27 +103,22 @@ const styles = StyleSheet.create({
   },
 
   each:{
-      paddingHorizontal: 10,
-      borderRadius: 10,
-      // borderWidth:1,
-      width:300,
-      height: 130,
-      backgroundColor: "#b8e3ff",
-      right:50,
-      top: 50,
-     position:'absolute', 
-      fontFamily: "Gill Sans",
-      fontSize: 30,
-      
-      paddingTop: 20,
-      
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    width:300,
+    height: 130,
+    backgroundColor: "#b8e3ff",
+    right:50,
+    top: 50,
+    position:'absolute', 
+    fontFamily: "Gill Sans",
+    fontSize: 30,
+    paddingTop: 20,  
     },
 
     title:{
       paddingHorizontal: 10,
       borderRadius: 10,
-      
-      // borderWidth:1,
       width:280,
       height:25,
       backgroundColor: "#b8e3ff",

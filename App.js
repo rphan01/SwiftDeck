@@ -1,22 +1,17 @@
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from 'react';
-
 import Login from "./screens/Login"; 
 import Register from "./screens/Register";
 import Home from "./screens/Home";
 import Learn from "./screens/Learn";
 import Card from "./screens/Card";
-import Game from "./screens/Game";
 import Profile from "./screens/Profile";
-import Create from "./screens/Create";
 import Creates from "./screens/Creates";
 import Add from "./screens/Add";
 import Title from "./screens/Title";
 
 const Stack = createNativeStackNavigator()
-
 export default function App() {
   return (
     <NavigationContainer>
@@ -28,7 +23,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
         <Stack.Screen
           name = "Register"
           component={Register}
@@ -36,7 +30,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
         <Stack.Screen
           name = "Home"
           component={Home}
@@ -44,7 +37,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
         <Stack.Screen
           name = "Learn"
           component={Learn}
@@ -52,15 +44,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
-        <Stack.Screen
-          name = "Game"
-          component={Game}
-          options = {{
-            headerShown: false
-          }}
-        />
-
         <Stack.Screen
           name = "Card"
           component={Card}
@@ -68,15 +51,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
-        <Stack.Screen
-          name = "Create"
-          component={Create}
-          options = {{
-            headerShown: false
-          }}
-        />
-
         <Stack.Screen
           name = "Profile"
           component={Profile}
@@ -91,7 +65,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
         <Stack.Screen
           name = "Creates"
           component={Creates}
@@ -99,7 +72,6 @@ export default function App() {
             headerShown: false
           }}
         />
-
         <Stack.Screen
         name = "Add"
         component={Add}
