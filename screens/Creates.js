@@ -2,39 +2,47 @@ import React, { useEffect, useState } from 'react';
 import { Button, FlatList, StyleSheet, Text, View, TouchableOpacity,Image } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 
-function Creates ({route, navigation }) {
-//   console.log(route.params);
-    //dataSource contains the data we want rendered as a list
-    //the dataSource should contain a unique key for each item in the array
-     
+import { db } from '../FirebaseConfig';
+import { collection, addDoc, getDocs, doc, query, where, getDoc} from 'firebase/firestore/lite';
+import { getAuth } from 'firebase/auth';
+
+function Creates ({ navigation, route }) {
+    const {name} = route.params
+    const {dataList} = route.params
+    console.log(dataList)
+    
+
   
-   
+    const [data, setData] = useState([])
+
+    const auths = getAuth();
+    const user = auths.currentUser;
+    const uid = user.uid;
     
 
-  //   // console.log(route.params.listData)
-  //  // setListData(listData.concat(route.params));
-  //  const[listData, setListData] = useState(dataSource);
-  //  const term = route.params.term;
-  //  const def = route.params.def;
-  //  const count = route.params.count;
-  //  dataSource.push({word: term, definition: def});
- 
-    // useEffect(()=>{
-    //   if(route.params){
-    //     setListData(listData.concat(route.params))
+    
+
+    // useEffect(() =>{
+    //   const loadData = async() => {
+    //     // // const docs = doc(db, "users",uid, "decks", names);
+    //     // const docs = collection(db, "decks")
+    //     // const q = query(docs, where('td', '!=', false));
+    //     // const querySnapshot = await (getDocs(q))
+    //     // querySnapshot.forEach((doc) => {
+    //     //   console.log(doc.get("td"))
+    //     // })
+    //     const docs = doc(db, "users", uid, "decks", names)
+    //     const docSnap = await getDoc(docs);
         
-    //     // setListData(listData.concat({word:route.params.word, definition: route.params.definition}));
-    //     // console.log(listData)
+    //     const array = docSnap.data().td
+        
+    //     data.push(array)
     //   }
-    // }, [route.params]);
+    //   loadData();
+    //   console.log(data)
+    // }, [])
     
-    
-    // console.log(listData)
-    // function please(){
-    //     dataSource.push(route.params);
-    //     console.log(dataSource[0]);
-    // }
-
+  
 
     return (
         <LinearGradient style={styles.container} colors ={["#08204f", "#92e8f1"]}>
@@ -42,18 +50,18 @@ function Creates ({route, navigation }) {
                     style = {styles.head_logo}></Image>
              <View style = {{flexDirection: "column", position: 'absolute', width: 390, height: 530, top: 230}}>
             <FlatList
-            data={route.params}
-            extraData={route.params}
+            data={data}
+            extraData={data}
             renderItem={({item}) => 
                 
                 <View style={styles.border}>
-                <Text style={styles.itemName}>{item.term}</Text>
-                <Text style={styles.itemDesc}>{item.def}</Text>
+                <Text style={styles.itemName}>{item.word}</Text>
+                <Text style={styles.itemDesc}>{item.definition}</Text>
                 </View>
             } />
             </View>
              
-             <TouchableOpacity onPress ={()=> {navigation.navigate("Add");}}>
+             <TouchableOpacity onPress ={()=> {navigation.navigate("Add", {names:JSON.stringify(name)});}}>
                 <View style = {styles.createB}>
                     <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 5, fontSize: 15, fontWeight: 'bold'}}>
                         Create

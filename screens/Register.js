@@ -4,7 +4,9 @@ import { useNavigation, useEffect } from '@react-navigation/native';
 import React, {useState} from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { fb_auth } from '../FirebaseConfig.ts';
-
+import { db } from '../FirebaseConfig';
+import { collection, addDoc, setDoc, doc } from 'firebase/firestore/lite';
+import { getAuth } from 'firebase/auth';
 
 const Register = () =>{
     const[email, setEmail] = useState('');
@@ -12,21 +14,38 @@ const Register = () =>{
     const [loading, setLoading] = useState(false);
     const auth = fb_auth;
 
+    // const auths = getAuth();
+    // const user = auths.currentUser;
+    // const uid = user.uid;
+    // console.log(user.email)
+
+    
+    // const add = async () =>{
+    //   const cVal = collection(db, 'users')
+    //   addDoc(cVal, {emails:email})
+    //   setDoc(doc(db, "users", uid), {emails:email});
+    // }
     const signUp = async() => {
       setLoading(true);
       try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
         console.log(response);
-        alert("thank you for selling your soul to firebase!");
+        alert("Thank you for joining SwiftDeck");
+        const docRef = await addDoc(collection(db, 'users'),{
+          emails: email,
+        });
+        console.log(docRef.id);
+        
+
         navigation.navigate("Home");
       } catch (error) {
         console.log(error);
         alert("make the password longer loser");
       } finally {
         setLoading(false);
-        firestore().collection("users").add({
-          email:email
-        })
+        // firestore().collection("users").add({
+        //   email:email
+        // })
       }
     }
 

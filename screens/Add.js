@@ -1,17 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, StyleSheet, Text, View, Image, TouchableOpacity, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from '@react-navigation/native';
 import { db } from '../FirebaseConfig';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { addDoc, arrayUnion, collection, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore/lite';
+import { getAuth } from 'firebase/auth';
 
-const Add = (navigation) => {
-
-  const getData = async() => {
-    const list = collection(db, 'users');
-    const test = await getDocs(list);
-    const nameList = test.docs.map(doc => doc.data());
-    console.log(nameList);
+function Add ({route}){
+  const navigation= useNavigation();
+  const[word, setWord] = useState('')
+  const[definition, setDef] = useState('')
+  const auths = getAuth();
+  const user = auths.currentUser;
+  const uid = user.uid;
+  
+  const{names} = route.params
+  
+  
+  const addTD = async() =>{
+    const val = doc(db, "users",uid, "decks", JSON.parse(names))
+   await updateDoc(val,{
+      td: arrayUnion({word,definition}),
+   })
   }
+
+  const data =[]
+
+  function handleAdd(){
+    data.push({word: word, defintion: definition})
+  }
+ 
 
 
   return (
@@ -22,7 +40,7 @@ const Add = (navigation) => {
                   style = {styles.head_logo}></Image>
           
           <View style = {styles.box}>
-              {/* <KeyboardAvoidingView enabled = {true} keyboardVerticalOffset={10}>
+              <KeyboardAvoidingView enabled = {true} keyboardVerticalOffset={10}>
                            
               <TextInput multiline= {true} style = {styles.term}
                           value={word}
@@ -35,16 +53,16 @@ const Add = (navigation) => {
                           placeholder='Enter Definition'
                           onChangeText={(newText)=>{
                           setDef(newText);}}/>
-             </KeyboardAvoidingView> */}
+             </KeyboardAvoidingView>
 
-              <TouchableOpacity onPress ={()=>{getData();}}>
+              <TouchableOpacity onPress ={()=>{addTD();handleAdd();navigation.navigate("Creates", names)}}>
                   <View style = {styles.createB}>
                       <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 10, fontSize: 30, fontWeight: 'bold'}}>
                           Create
                       </Text>
                   </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress = {() => {}}>
+              <TouchableOpacity onPress = {() => {navigation.navigate("Home")}}>
                 <View style = {styles.backB}>
                   <Text style = {{color: "#FFF" ,textAlign: 'center', fontFamily: 'Gill Sans', top: 5, fontSize: 15, fontWeight: 'bold'}}>BACK</Text>
                 </View>
@@ -153,7 +171,7 @@ const styles = StyleSheet.create({
       height:110,
       backgroundColor: "#b8e3ff",
       left:10,
-      top: 90,
+      top: 60,
       color: "#FFF",
       fontFamily: "Gill Sans",
       fontSize: 25,
@@ -171,7 +189,7 @@ const styles = StyleSheet.create({
       height: 110,
       backgroundColor: "#b8e3ff",
       left:10,
-      top: 120,
+      top: 100,
       color: "#FFF",
       fontFamily: "Gill Sans",
       fontSize: 25,

@@ -3,19 +3,45 @@ import { Button, TextInput, StyleSheet, Text, View, Image, TouchableOpacity, Key
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 
-const Title = () =>{
-    const navigation= useNavigation();
-    const[name, setName] = useState('');
-    console.log(name)
+import { addDoc, collection, doc, getDocs, query, setDoc } from 'firebase/firestore/lite';
+import { db } from '../FirebaseConfig';
+import { getAuth } from 'firebase/auth';
 
-    const getData = async() => {
-      const list = collection(db, 'users');
-      const test = await getDocs(list);
-      const nameList = test.docs.map(doc => doc.data());
-      console.log(nameList);
-    }
-   
+const Title = (route) =>{
+    const navigation= useNavigation();
+    const [name,setName] = useState('');
+    // db.collection("users").collection("decks")({
+    //   title:  name
+    // });
+    
+    const auths = getAuth();
+    const user = auths.currentUser;
+    const uid = user.uid;
+    
   
+    const setDName = async() =>{
+      setDoc(doc(db, "users",uid, "decks", name), {title:name, td: []})
+    }
+    
+
+    const addTitle = async() =>{
+      const val = doc(db, 'users',uid)
+      const collectionVal = collection(val, 'decks')
+      addDoc(collectionVal, {title:name} )
+      
+    }
+    
+  
+    const q = query(collection(db, 'users'));
+
+    // const each = async() =>{
+    //   const querySnapshot =  await getDocs(q);
+    //   querySnapshot.forEach((doc)=>{
+    //     console.log(doc.id, " => ", doc.data());
+    //   })
+    // }
+    
+
   return (
   
       <LinearGradient style = {styles.container}
@@ -27,7 +53,7 @@ const Title = () =>{
               <TextInput onChangeText={(newText)=>{
                           setName(newText);}}  placeholder="Name of the Deck"style = {styles.title}></TextInput>
 
-              <TouchableOpacity onPress ={()=> {getData();navigation.navigate("Add", name);}} >
+              <TouchableOpacity onPress ={()=> {addTitle();navigation.navigate("Add", {names: JSON.stringify(name)});setDName();}} >
                 <View style= {styles.createB}>
                     <Text style = {{color: "#FFF",fontFamily: "Gill Sans",fontSize: 25, fontWeight:'bold', top: 10}}>Create</Text>
                 </View>

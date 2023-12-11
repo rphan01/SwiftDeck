@@ -2,10 +2,25 @@ import { StyleSheet, Text,Button, View, Image, TouchableOpacity, TextInput,FlatL
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import React, {useState} from 'react';
+import { addDoc, collection, doc, getDocs, query, setDoc } from 'firebase/firestore/lite';
+import { db } from '../FirebaseConfig';
+import { getAuth } from 'firebase/auth';
 // import { auth } from '../firebase';
 
 
 function Home ({route, navigation }) {
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const uid = user.uid
+
+
+  const add = async() =>{
+    setDoc(doc(db, "users", uid), {email:user.email});
+  }
+  
+  add();
+
 //   const dataSource =[]
 
 //   dataSource.push(route.params)
@@ -23,7 +38,7 @@ function Home ({route, navigation }) {
   
 
     return(
-        <LinearGradient style = {styles.container}
+        <LinearGradient  style = {styles.container} 
             colors= {["#08204f", "#92e8f1"]}>
             <Image source = {require('../assets/swiftDeck.png')}
                     style = {styles.head_logo}></Image>
@@ -70,13 +85,13 @@ function Home ({route, navigation }) {
             
 
             <View style = {{flexDirection: "column", position:'absolute', top: 390 , width:390, height: 350}}>
-                <FlatList data ={route.params} 
+                {/* <FlatList data ={route.params} 
                 renderItem = {({item}) => <TouchableOpacity style = {styles.sets}>
                    <Text style = {styles.item}>{item.title}</Text>
                    
                    </TouchableOpacity>
                 }
-              />
+              /> */}
             </View>
 
             {/* <View style = {{position:'absolute', top: 390, backgroundColor: '#FFF', width:390, height: 350}}>
